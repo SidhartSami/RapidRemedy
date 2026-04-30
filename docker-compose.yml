@@ -1,0 +1,46 @@
+services:
+  db:
+    image: ankane/pgvector:latest
+    container_name: rapid_remedy_db
+    ports:
+      - "5432:5432"
+    environment:
+      - POSTGRES_DB=rapid_remedy
+      - POSTGRES_USER=postgres
+      - POSTGRES_PASSWORD=postgres
+    volumes:
+      - pgdata:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U postgres"]
+      interval: 5s
+      timeout: 5s
+      retries: 5
+
+  backend:
+    build: ./backend
+    container_name: rapid_remedy_backend
+    ports:
+      - "8000:8000"
+    environment:
+      - DATABASE_URL=postgresql://postgres:postgres@db:5432/rapid_remedy
+    depends_on:
+      db:
+        condition: service_healthy
+    volumes:
+      - ./backend:/app
+      - ./data:/app/data
+
+  dashboard:
+    build: ./dashboard
+    container_name: rapid_remedy_dashboard
+    ports:
+      - "8501:8501"
+    environment:
+      - BACKEND_URL=http://backend:8000
+    depends_on:
+      - backend
+    volumes:
+      - ./dashboard:/app
+
+volumes:
+  pgdata:
