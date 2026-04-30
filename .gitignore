@@ -1,0 +1,20 @@
+# Large data files
+data/pubmed_200k_rct.csv
+data/PubMed_200k_RCT/
+data/PubMed_20k_RCT/
+data/PubMed_200k_RCT_numbers_replaced_with_at_sign/
+data/PubMed_20k_RCT_numbers_replaced_with_at_sign/
+
+# Python
+__pycache__/
+*.py[cod]
+*$py.class
+.venv/
+venv/
+ENV/
+env/
+.env
+
+# Local settings
+.vscode/
+.idea/
